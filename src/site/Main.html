@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+        <meta charset="UTF-8">
+        <title>MTG Noodle</title>
+        <script type="text/javascript">
+            function loadPage(name)
+            {
+                var htmlRequest = new XMLHttpRequest();
+                htmlRequest.onreadystatechange = function() {
+                    if (htmlRequest.readyState == 4 && htmlRequest.status == 200)
+                        document.getElementById('content').innerHTML = htmlRequest.responseText;
+                }
+                htmlRequest.open("GET", name + ".html", true);
+                htmlRequest.send(null);
+
+                var jsRequest = new XMLHttpRequest();
+                jsRequest.onreadystatechange = function() {
+                    if (jsRequest.readyState == 4 && jsRequest.status == 200) {
+                        var js = document.createElement('script');
+                        js.type = 'text/javascript';
+                        js.text = jsRequest.responseText;
+                        document.body.appendChild(js);
+                    }
+                }
+                jsRequest.open("GET", name + ".js", true);
+                jsRequest.send(null);
+
+                var cssRequest = new XMLHttpRequest();
+                cssRequest.onreadystatechange = function() {
+                    if (cssRequest.readyState == 4 && cssRequest.status == 200) {
+                        var css = document.createElement('style');
+                        css.type = 'text/css';
+                        css.innerHTML = cssRequest.responseText;
+                        document.body.appendChild(css);
+                    }
+                }
+                cssRequest.open("GET", name + ".css", true);
+                cssRequest.send(null);
+            }
+        </script>
+    </head>
+    <body onload="loadPage()">
+        <div id="content"></div>
+    </body>
+</html>
