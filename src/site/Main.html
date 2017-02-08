@@ -5,43 +5,63 @@
         <meta charset="UTF-8">
         <title>MTG Noodle</title>
         <script type="text/javascript">
-            function loadPage(name)
+            function loadPage()
             {
-                var htmlRequest = new XMLHttpRequest();
-                htmlRequest.onreadystatechange = function() {
-                    if (htmlRequest.readyState == 4 && htmlRequest.status == 200)
-                        document.getElementById('content').innerHTML = htmlRequest.responseText;
-                }
-                htmlRequest.open("GET", name + ".html", true);
-                htmlRequest.send(null);
+                var mimesToElement = { "text/html":"div", "text/js":"js", "text/css":"style" }
+                var resources = [];
 
-                var jsRequest = new XMLHttpRequest();
-                jsRequest.onreadystatechange = function() {
-                    if (jsRequest.readyState == 4 && jsRequest.status == 200) {
-                        var js = document.createElement('script');
-                        js.type = 'text/javascript';
-                        js.text = jsRequest.responseText;
-                        document.body.appendChild(js);
+                /*for (var i = 0; i < resources.length; i++) {
+                    var request = new XMLHttpRequest();
+                    request.onreadystatechange = function () {
+                        if (request.readyState == 4 && request.status == 200) {
+                            var element = document.createElement(mimesToElement[request.responseType]);
+                            element.type = request.responseType;
+                            element.innerHTML = request.responseText
+                            document.body.appendChild(element);
+                        }
+                    }
+                    request.open("GET", resources[i], true);
+                    request.send(null);
+                }*/
+
+                var request1 = new XMLHttpRequest();
+                request1.onreadystatechange = function () {
+                    if (request1.readyState == 4 && request1.status == 200) {
+                        var element = document.createElement(mimesToElement[request1.responseType]);
+                        element.type = request1.responseType;
+                        element.innerHTML = request1.responseText
+                        document.body.appendChild(element);
                     }
                 }
-                jsRequest.open("GET", name + ".js", true);
-                jsRequest.send(null);
+                request1.open("GET", resources[0], true);
+                request1.send(null);
 
-                var cssRequest = new XMLHttpRequest();
-                cssRequest.onreadystatechange = function() {
-                    if (cssRequest.readyState == 4 && cssRequest.status == 200) {
-                        var css = document.createElement('style');
-                        css.type = 'text/css';
-                        css.innerHTML = cssRequest.responseText;
-                        document.body.appendChild(css);
+                var request2 = new XMLHttpRequest();
+                request2.onreadystatechange = function () {
+                    if (request2.readyState == 4 && request2.status == 200) {
+                        var element = document.createElement(mimesToElement[request2.responseType]);
+                        element.type = request2.responseType;
+                        element.innerHTML = request2.responseText
+                        document.body.appendChild(element);
                     }
                 }
-                cssRequest.open("GET", name + ".css", true);
-                cssRequest.send(null);
+                request2.open("GET", resources[1], true);
+                request2.send(null);
+
+                var request3 = new XMLHttpRequest();
+                request3.onreadystatechange = function () {
+                    if (request3.readyState == 4 && request3.status == 200) {
+                        var element = document.createElement(mimesToElement[request3.responseType]);
+                        element.type = request3.responseType;
+                        element.innerHTML = request3.responseText
+                        document.body.appendChild(element);
+                    }
+                }
+                request3.open("GET", resources[2], true);
+                request3.send(null);
             }
         </script>
     </head>
     <body onload="loadPage()">
-        <div id="content"></div>
     </body>
 </html>
