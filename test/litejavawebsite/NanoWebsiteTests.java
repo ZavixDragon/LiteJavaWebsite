@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
@@ -14,29 +15,36 @@ public class NanoWebsiteTests {
 
     @BeforeClass
     public static void startServer() {
-        website = new NanoWebsite(9999, "testsiteresources");
+        website = new NanoWebsite(9999, "testsiteresources", "NotFound");
         website.start();
     }
 
     @Test
     public void AskForBasePage_SuppliesIndexHtml() {
-        String result = loadContentFromUrl("http://localhost:9999/");
+        String result = loadContentFromUrlAsString("http://localhost:9999/");
 
-        Assert.assertEquals(loadResource("Index.html"), result);
+        Assert.assertEquals(loadResourceAsString("Index.html"), result);
     }
 
     @Test
     public void AskForCustomerBasePage_SuppliesCustomerIndexHtml() {
-        String result = loadContentFromUrl("http://localhost:9999/Customer/");
+        String result = loadContentFromUrlAsString("http://localhost:9999/Customer/");
 
-        Assert.assertEquals(loadResource("customer/Index.html"), result);
+        Assert.assertEquals(loadResourceAsString("customer/Index.html"), result);
     }
 
     @Test
     public void AskForLoginPage_SuppliesLoginHtml() {
-        String result = loadContentFromUrl("http://localhost:9999/Login");
+        String result = loadContentFromUrlAsString("http://localhost:9999/Login");
 
-        Assert.assertEquals(loadResource("Login.html"), result);
+        Assert.assertEquals(loadResourceAsString("Login.html"), result);
+    }
+
+    @Test
+    public void AskForNonExistentPage_SuppliesNotFoundHtml() {
+        String result = loadContentFromUrlAsString("http://localhost:9999/Nowhere");
+
+        Assert.assertEquals(loadResourceAsString("NotFound.html"), result);
     }
 
     @AfterClass
@@ -44,17 +52,21 @@ public class NanoWebsiteTests {
         website.stop();
     }
 
-    private String loadContentFromUrl(String url) {
+    private String loadContentFromUrlAsString(String url) {
+        return new InputStreamToString(loadContentFromUrl(url)).get();
+    }
+
+    private InputStream loadContentFromUrl(String url) {
         try {
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("GET");
-            return new InputStreamToString(con.getInputStream()).get();
+            return con.getInputStream();
         } catch(Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    private String loadResource(String resourceName) {
+    private String loadResourceAsString(String resourceName) {
         try {
             return new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("test").resolve("litejavawebsite").resolve("testsiteresources").resolve(resourceName)), "UTF-8");
         } catch(Exception ex) {
