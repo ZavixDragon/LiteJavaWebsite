@@ -15,7 +15,7 @@ public class NanoWebsiteTests {
 
     @BeforeClass
     public static void startServer() {
-        website = new NanoWebsite(9999, "testsiteresources", "NotFound");
+        website = new NanoWebsite(9999, "testsiteresources", "NotFound.html");
         website.start();
     }
 
@@ -31,13 +31,6 @@ public class NanoWebsiteTests {
         String result = loadContentFromUrlAsString("http://localhost:9999/Customer/");
 
         Assert.assertEquals(loadResourceAsString("customer/Index.html"), result);
-    }
-
-    @Test
-    public void AskForLoginPage_SuppliesLoginHtml() {
-        String result = loadContentFromUrlAsString("http://localhost:9999/Login");
-
-        Assert.assertEquals(loadResourceAsString("Login.html"), result);
     }
 
     @Test

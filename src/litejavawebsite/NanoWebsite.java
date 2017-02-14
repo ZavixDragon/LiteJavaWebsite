@@ -47,9 +47,6 @@ public class NanoWebsite {
                 uri = "/" + uri;
             if (uri.charAt(uri.length() - 1) == '/')
                 uri += "Index.html";
-            int extensionIndex = uri.lastIndexOf('.');
-            if (extensionIndex == -1)
-                uri += ".html";
             return uri;
         }
     }
